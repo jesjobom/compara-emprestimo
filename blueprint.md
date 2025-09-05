@@ -8,30 +8,48 @@ This application is designed to help Brazilian users compare different types of 
 
 This section documents the project's evolution.
 
+### Version 1.6
+
+*   **Accurate Rate Formatting:** Updated the percentage formatting in the `BankListScreen` to ensure all interest rates are displayed with a minimum of two decimal places, providing greater precision and clarity.
+
+### Version 1.5
+
+*   **Simulator Bug Fix:** Corrected a critical error in the loan simulator that was caused by recent data model changes. The calculation now correctly uses the `monthlyInterestRate`.
+*   **Flexible Loan Terms:** The simulator has been enhanced to allow users to input the loan term in either "Months" or "Years," providing greater flexibility.
+*   **Dynamic Calculation:** The payment calculation logic now intelligently handles both monthly and yearly terms, converting years to months to ensure the formula is always accurate.
+
+### Version 1.4
+
+*   **Comprehensive Rate Display:** The `BankListScreen` now displays both monthly and annual interest rates, giving users a more complete understanding of loan costs.
+*   **Expanded Data Model:** The `Bank` model was updated to include both `monthlyInterestRate` and `yearlyInterestRate`, parsed directly from the BCB API.
+*   **Advanced Sorting:** The sorting functionality on the `BankListScreen` was enhanced to allow users to rank banks by either their monthly or annual interest rates.
+
+### Version 1.3
+
+*   **Robust Date Logic:** The bank data API call now uses a more robust date calculation. It queries for data from 3 weeks ago and automatically adjusts the date to the previous Friday if it falls on a weekend, ensuring a valid weekday is always used.
+
+### Version 1.2
+
+*   **Real Bank Data:** The app now fetches real-time interest rate data for banks offering a specific loan type. The mock bank data has been completely removed.
+
+### Version 1.1
+
+*   **API Integration:** The app now fetches real loan type data from the official Brazilian Central Bank (BCB) API.
+
 ### Version 1.0
+
 *   **Project Structure:** Standard Flutter project structure.
-*   **Core Navigation:** A `BottomNavigationBar` using `go_router`'s `ShellRoute` to switch between "Explorer" and "Simulator" screens.
-*   **Theming:** A modern Material 3 theme with light and dark modes, managed by the `provider` package. The color scheme is based on `Colors.deepPurple`, and typography uses `google_fonts`.
-*   **State Management:** `provider` is used for theme management.
-*   **Routing:** Declarative navigation handled by the `go_router` package, including nested routes for viewing banks associated with a loan type.
-*   **Data Models:** `LoanType` and `Bank` models to structure application data.
-*   **API Service:** An `ApiService` class to abstract data fetching, initially with mock data and a simple caching mechanism.
-*   **Screens:**
-    *   `ExplorerScreen`: Displays a searchable list of loan types.
-    *   `BankListScreen`: Displays a sortable list of banks for a selected loan type.
-    *   `SimulatorScreen`: A form for users to calculate estimated loan payments.
-*   **Localization:** Includes the `intl` package for number and currency formatting, configured for Brazilian Portuguese (`pt_BR`).
+*   **Core Navigation & Routing:** `go_router` with a `BottomNavigationBar`.
+*   **Theming:** Material 3 theme with light/dark modes using `provider`.
+*   **Data Models & API Service:** Initial setup with mock data.
+*   **Screens:** `ExplorerScreen`, `BankListScreen`, `SimulatorScreen`.
+*   **Localization:** `intl` package for `pt_BR` formatting.
 
-## Current Plan: Integrate Real Loan Data (v1.1)
+## Current Plan: Improve Data Formatting (v1.6)
 
-The goal of this iteration is to replace the mock loan data with real data from the Brazilian Central Bank (BCB) API, enhancing the "Explorer" screen's functionality.
+The goal of this iteration is to improve the accuracy of the data presentation by fixing the formatting of interest rate percentages.
 
 ### Steps:
-1.  **Add HTTP Dependency:** Add the `http` package to `pubspec.yaml` to enable communication with external APIs.
-2.  **Update Data Model:** Modify the `LoanType` class in `lib/models.dart` to match the structure of the BCB API response. The new model includes `segment` and `modality` fields, with the `name` being a combination of both.
-3.  **Update API Service:** Refactor the `getLoanTypes` method in `lib/api_service.dart` to:
-    *   Fetch data from the BCB's `HistoricoTaxaJurosDiario/ParametrosConsulta` endpoint.
-    *   Parse the JSON response.
-    *   Handle potential duplicate entries by using a `Set`.
-    *   Maintain the existing in-memory cache to avoid redundant API calls.
-4.  **Verify Integration:** Ensure the `ExplorerScreen` correctly fetches and displays the new data from the BCB API.
+
+1.  **Update Formatting Logic:** Modify the `_formatRate` function in `lib/bank_list_screen.dart` to use a `NumberFormat` instance that enforces a minimum of two decimal digits.
+2.  **Update Blueprint:** Document the formatting improvement for better data accuracy.
